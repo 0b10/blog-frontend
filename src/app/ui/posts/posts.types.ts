@@ -9,6 +9,7 @@ export interface IAuthor {
 export interface IPost {
   id: number;
   title: string;
+  subtitle: string;
   body: string;
   author: IAuthor;
   createdAt: Date;

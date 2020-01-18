@@ -12,7 +12,7 @@ export class PostSummaryComponent implements OnInit {
   @Input() public body: string;
   @Input() public author: IAuthor;
   @Input() public createdAt: Date;
-  // TODO: subtitle
+  @Input() public subtitle: string;
   // TODO: header image
 
   constructor() {}

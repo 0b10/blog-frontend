@@ -12,6 +12,7 @@ export class GetPostsGqlService extends Query<IGQLPostsResponse> {
       posts(orderBy: "latest", quantity: 10) {
         id
         title
+        subtitle
         body
         createdAt
         author {
