@@ -1,5 +1,5 @@
 <div class="container">
-  <app-no-posts *ngIf="posts.length === 0; else postsContainer"></app-no-posts>
+  <app-loading-posts *ngIf="posts.length === 0; else postsContainer"></app-loading-posts>
   <ng-template #postsContainer>
     <div class="posts-container">
       <app-post-summary *ngFor="let post of posts" class="posts-item" [post]="post">

@@ -1,0 +1,20 @@
+<div class="container">
+  <div *ngIf="loading; else notLoading">
+    <ngb-progressbar
+      class="item"
+      height="40px"
+      type="success"
+      [value]="loadPecent"
+      [striped]="true"
+      [animated]="true"
+    >
+    </ngb-progressbar>
+    <p class="text item">Loading...</p>
+  </div>
+  <ng-template #notLoading>
+    <ngb-progressbar class="item" height="40px" type="danger" [value]="100">
+      0%
+    </ngb-progressbar>
+    <p class="text item">No posts to display :(</p>
+  </ng-template>
+</div>
