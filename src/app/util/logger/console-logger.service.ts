@@ -20,15 +20,15 @@ export class ConsoleLoggerService implements ILogger {
     console.warn(this.getContext(context), message);
   }
 
-  error(message: string, context: TContext, data?: IAnyObject, error?: TError): void {
-    console.error(this.getContext(context), message, { error, data });
-  }
-
-  debug(message: string, context: TContext): void {
-    console.debug(this.getContext(context), message);
-  }
-
-  trace(message: string, context: TContext, data: IAnyObject): void {
+  error(message: string, context: TContext, data?: IAnyObject): void {
     console.error(this.getContext(context), message, { data });
+  }
+
+  debug(message: string, context: TContext, data?: IAnyObject): void {
+    console.debug(this.getContext(context), message, { data });
+  }
+
+  trace(message: string, context: TContext, data: IAnyObject, error?: TError): void {
+    console.error(this.getContext(context), message, { data, error });
   }
 }

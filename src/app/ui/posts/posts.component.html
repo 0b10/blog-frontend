@@ -1,0 +1,12 @@
+<div class="container">
+  <app-post-summary
+    *ngFor="let post of posts"
+    class="item"
+    [title]="post.title"
+    [id]="post.id"
+    [body]="post.body"
+    [author]="post.author"
+    [createdAt]="post.createdAt"
+  >
+  </app-post-summary>
+</div>
