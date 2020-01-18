@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IAuthor } from '../posts/posts.types';
+import { IPost } from '../posts/posts.types';
 
 @Component({
   selector: 'app-post-summary',
@@ -7,13 +7,7 @@ import { IAuthor } from '../posts/posts.types';
   styleUrls: ['./post-summary.component.sass'],
 })
 export class PostSummaryComponent implements OnInit {
-  @Input() public id: number;
-  @Input() public title: string;
-  @Input() public body: string;
-  @Input() public author: IAuthor;
-  @Input() public createdAt: Date;
-  @Input() public subtitle: string;
-  @Input() public headerImage: string;
+  @Input() public post: IPost;
 
   constructor() {}
 

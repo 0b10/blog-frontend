@@ -1,14 +1,3 @@
 <div class="container">
-  <app-post-summary
-    *ngFor="let post of posts"
-    class="item"
-    [title]="post.title"
-    [subtitle]="post.subtitle"
-    [id]="post.id"
-    [headerImage]="post.headerImage"
-    [body]="post.body"
-    [author]="post.author"
-    [createdAt]="post.createdAt"
-  >
-  </app-post-summary>
+  <app-post-summary *ngFor="let post of posts" class="item" [post]="post"> </app-post-summary>
 </div>

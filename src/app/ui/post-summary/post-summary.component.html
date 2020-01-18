@@ -1,19 +1,19 @@
 <div class="card">
   <div class="header">
     <h2 class="title">
-      {{ title }}
+      {{ post.title }}
     </h2>
-    <img class="image" src="{{ headerImage }}" />
+    <img class="image" src="{{ post.headerImage }}" />
   </div>
   <div class="body">
     <h3 class="subtitle">
-      {{ subtitle }}
+      {{ post.subtitle }}
     </h3>
     <p class="body-content">
-      {{ body }}
+      {{ post.body }}
     </p>
     <div class="author">
-      <span>by {{ author.alias }}</span>
+      <span>by {{ post.author.alias }}</span>
     </div>
   </div>
 </div>
