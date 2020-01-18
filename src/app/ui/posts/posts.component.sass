@@ -3,8 +3,13 @@ $bp-sm: "(min-width: 601px) and (max-width: 1000px)"
 $bp-md: "(min-width: 1001px) and (max-width: 1500px)"
 $bp-lg: "(min-width: 1501px) and (max-width: 2000px)"
 $bp-xl: "(min-width: 2001px)"
+$bg-color: #111111
 
 .container
+  height: 100%
+
+.posts-container
+  background-color: $bg-color
   display: grid
   width: 100%
   grid-gap: 25px
@@ -19,6 +24,6 @@ $bp-xl: "(min-width: 2001px)"
   @media #{$bp-xl}
     grid-template-columns: repeat(5, 1fr)
 
-.item
+.posts-item
   width: 100%
   height: 500px

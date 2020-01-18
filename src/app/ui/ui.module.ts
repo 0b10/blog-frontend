@@ -4,9 +4,10 @@ import { PostSummaryComponent } from './post-summary/post-summary.component';
 import { GetPostsGqlService } from './posts/graphql/get-posts-gql.service';
 import { PostsComponent } from './posts/posts.component';
 import { PostsService } from './posts/posts.service';
+import { NoPostsComponent } from './posts/no-posts/no-posts.component';
 
 @NgModule({
-  declarations: [PostSummaryComponent, PostsComponent],
+  declarations: [PostSummaryComponent, PostsComponent, NoPostsComponent],
   imports: [CommonModule],
   exports: [PostsComponent, PostSummaryComponent],
   providers: [PostsService, GetPostsGqlService],

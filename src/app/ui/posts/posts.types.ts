@@ -31,9 +31,5 @@ export interface IPostsAdapter {
    * @param observer - an RxJS observer object, whose next() function accepts the resulting
    *  IPosts[] as a param.
    */
-  subscribeToPosts(
-    orderBy: TOrderBy,
-    quantity: TQuantity,
-    observer: PartialObserver<IPost[]>
-  ): void;
+  observePosts(orderBy: TOrderBy, quantity: TQuantity, observer: PartialObserver<IPost[]>): void;
 }

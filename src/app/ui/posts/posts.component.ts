@@ -10,7 +10,7 @@ import { IPost, TOrderBy } from './posts.types';
   styleUrls: ['./posts.component.sass'],
 })
 export class PostsComponent implements OnInit {
-  public posts: IPost[];
+  public posts: IPost[] = [];
 
   constructor(
     private readonly postsService: PostsService,
@@ -46,6 +46,7 @@ export class PostsComponent implements OnInit {
       },
     };
 
-    this.postsService.subscribeToPosts('latest', 10, postsObserver);
+    this.postsService.observePosts('latest', 10);
+    this.postsService.posts.subscribe(postsObserver);
   }
 }
