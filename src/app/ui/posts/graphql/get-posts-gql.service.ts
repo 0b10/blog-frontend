@@ -13,6 +13,7 @@ export class GetPostsGqlService extends Query<IGQLPostsResponse> {
         id
         title
         subtitle
+        headerImage
         body
         createdAt
         author {

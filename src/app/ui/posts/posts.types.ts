@@ -10,6 +10,7 @@ export interface IPost {
   id: number;
   title: string;
   subtitle: string;
+  headerImage: string;
   body: string;
   author: IAuthor;
   createdAt: Date;
