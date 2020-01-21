@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import faker from 'faker';
+import { PartialObserver } from 'rxjs';
 import { IPost } from '../posts/posts.types';
+import { PostDetailService } from './post-detail.service';
 
 @Component({
   selector: 'app-post-detail',
@@ -10,24 +11,29 @@ import { IPost } from '../posts/posts.types';
 })
 export class PostDetailComponent implements OnInit {
   post: IPost;
+  error = false;
+  errorMessage: string;
 
-  constructor(private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly postDetailService: PostDetailService
+  ) {}
 
   ngOnInit() {
     const id: number = parseInt(this.route.snapshot.paramMap.get('id'), 10);
-    this.post = {
-      id,
-      // TODO: image alt text
-      title: `title for post ${id} - ` + faker.lorem.sentence(15),
-      subtitle: 'subtitle' + faker.lorem.sentence(20),
-      headerImage: 'https://fakeql.com/placeholder/500/200/e7d621158ec24ef6dsf3sf43459.svg',
-      tldr: 'tldr' + faker.lorem.sentence(150),
-      body: 'body' + faker.lorem.sentence(1000),
-      createdAt: new Date(),
-      author: {
-        id: 1,
-        alias: 'author',
+
+    const postObserver: PartialObserver<IPost> = {
+      next: (post) => {
+        this.error = false;
+        this.post = post;
+      },
+      error: () => {
+        this.error = true;
+        this.errorMessage = `Unable to fetch post (Post ID: ${id})`;
       },
     };
+
+    this.postDetailService.observePost(id);
+    this.postDetailService.post.subscribe(postObserver);
   }
 }
