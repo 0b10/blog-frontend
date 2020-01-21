@@ -1,0 +1,33 @@
+# source: http://localhost:3000/graphql
+# timestamp: Tue Jan 21 2020 12:07:53 GMT+0000 (Greenwich Mean Time)
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+"""
+A directive to order posts by - must be one of: "latest"
+"""
+scalar OrderPostsBy
+
+type Post {
+  id: ID!
+  headerImage: String!
+  title: String!
+  subtitle: String!
+  tldr: String!
+  body: String!
+  author: User!
+  createdAt: DateTime!
+}
+
+type Query {
+  post(id: ID!): Post!
+  posts(quantity: Int, orderBy: OrderPostsBy): [Post!]!
+}
+
+type User {
+  id: ID!
+  alias: String!
+}
