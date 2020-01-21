@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import faker from 'faker';
 import { IPost } from '../posts/posts.types';
 
@@ -10,13 +11,14 @@ import { IPost } from '../posts/posts.types';
 export class PostDetailComponent implements OnInit {
   post: IPost;
 
-  constructor() {}
+  constructor(private readonly route: ActivatedRoute) {}
 
   ngOnInit() {
+    const id: number = parseInt(this.route.snapshot.paramMap.get('id'), 10);
     this.post = {
-      id: 1,
+      id,
       // TODO: image alt text
-      title: 'title' + faker.lorem.sentence(15),
+      title: `title for post ${id} - ` + faker.lorem.sentence(15),
       subtitle: 'subtitle' + faker.lorem.sentence(20),
       headerImage: 'https://fakeql.com/placeholder/500/200/e7d621158ec24ef6dsf3sf43459.svg',
       tldr: 'tldr' + faker.lorem.sentence(150),

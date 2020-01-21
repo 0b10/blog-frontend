@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { PostDetailComponent } from './ui/post-detail/post-detail.component';
+import { PostsComponent } from './ui/posts/posts.component';
 
-
-const routes: Routes = [];
+const routes: Routes = [
+  { path: 'post/:id', component: PostDetailComponent },
+  { path: '', component: PostsComponent },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
