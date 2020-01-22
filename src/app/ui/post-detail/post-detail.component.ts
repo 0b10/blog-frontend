@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PartialObserver } from 'rxjs';
+import { Observable } from 'rxjs';
+import { first, map } from 'rxjs/operators';
 import { IPost } from '../posts/posts.types';
-import { PostDetailService } from './post-detail.service';
+import { GetPostGqlService } from './graphql/get-post-gql.service';
 
 @Component({
   selector: 'app-post-detail',
@@ -10,30 +11,18 @@ import { PostDetailService } from './post-detail.service';
   styleUrls: ['./post-detail.component.sass'],
 })
 export class PostDetailComponent implements OnInit {
-  post: IPost;
-  error = false;
-  errorMessage: string;
+  post$: Observable<IPost>;
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly postDetailService: PostDetailService
+    private readonly apolloPost: GetPostGqlService
   ) {}
 
   ngOnInit() {
     const id: number = parseInt(this.route.snapshot.paramMap.get('id'), 10);
-
-    const postObserver: PartialObserver<IPost> = {
-      next: (post) => {
-        this.error = false;
-        this.post = post;
-      },
-      error: () => {
-        this.error = true;
-        this.errorMessage = `Unable to fetch post (Post ID: ${id})`;
-      },
-    };
-
-    this.postDetailService.observePost(id);
-    this.postDetailService.post.subscribe(postObserver);
+    this.post$ = this.apolloPost.watch({ id }).valueChanges.pipe(
+      first(),
+      map((result) => result.data.post)
+    );
   }
 }

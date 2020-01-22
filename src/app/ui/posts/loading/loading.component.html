@@ -1,5 +1,5 @@
 <div class="container">
-  <div *ngIf="loading; else notLoading">
+  <div *ngIf="status == 'loading'; else notLoading">
     <ngb-progressbar
       class="item"
       height="40px"
