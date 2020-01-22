@@ -1,4 +1,4 @@
-export type TContext = 'PostsService' | 'PostsComponent';
+export type TContext = 'PostsService' | 'PostsComponent' | 'PostDetailComponent';
 
 // 'any' means gql error object can be passed in. Error.stack, Error.name will still be visible
 //  for Error
