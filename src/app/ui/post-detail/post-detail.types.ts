@@ -1,7 +1,10 @@
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { IPost } from '../posts/posts.types';
 
 export interface IPostDetailService {
-  post: Observable<IPost>;
-  observePost(id: IPost['id']): void;
+  post: IPost;
+  error: boolean;
+  loading: boolean;
+
+  getPostSub(id: IPost['id']): Subscription;
 }

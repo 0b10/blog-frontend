@@ -1,22 +1,34 @@
-<div *ngIf="post">
-  <div class="position-relative mb-2 overflow-hidden">
-    <h1 class="text-center p-2 m-0 position-absolute title-text title">
-      {{ post.title }}
+<article *ngIf="service.post">
+  <div class="position-relative mb-2k overflow-hidden">
+    <h1
+      class="text-center p-2 m-0 position-absolute title-text title"
+      role="heading"
+      aria-level="1"
+    >
+      {{ service.post.title }}
     </h1>
-    <img class="w-100 fit-image" src="{{ post.headerImage }}" />
+    <!-- TODO: set the aria label via the backend-->
+    <img
+      class="w-100 fit-image"
+      src="{{ service.post.headerImage }}"
+      role="img"
+      aria-label="A header image"
+    />
   </div>
   <div class="body-container mx-auto p-4 text-justify">
     <div class="author text-right mb-4">
-      <span
-        >Created on {{ post.createdAt | date }}, by <strong>{{ post.author.alias }}</strong></span
+      <!-- TODO: set role for author -->
+      <span data-testid="meta-data"
+        >Created on {{ service.post.createdAt | date }}, by
+        <strong>{{ service.post.author.alias }}</strong></span
       >
     </div>
-    <h2 class="mb-5 text-center">{{ post.subtitle }}</h2>
-    <div>
-      <h3>TL;DR</h3>
-      <p class="mb-5">{{ post.tldr }}</p>
+    <h2 role="heading" aria-level="2" class="mb-5 text-center">{{ service.post.subtitle }}</h2>
+    <main>
+      <h3 role="heading" aria-level="3">TL;DR</h3>
+      <p data-testid="tldr" class="mb-5">{{ service.post.tldr }}</p>
       <hr class="border-top border-secondary w-50 mt-4 mb-5" />
-      <p>{{ post.body }}</p>
-    </div>
+      <p data-testid="body">{{ service.post.body }}</p>
+    </main>
   </div>
-</div>
+</article>

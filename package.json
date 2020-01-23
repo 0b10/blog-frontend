@@ -40,6 +40,7 @@
     "@angular/cli": "~8.3.22",
     "@angular/compiler-cli": "~8.2.14",
     "@angular/language-service": "~8.2.14",
+    "@testing-library/angular": "^8.2.0",
     "@types/faker": "^4.1.9",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
@@ -56,6 +57,7 @@
     "karma-jasmine-html-reporter": "^1.4.0",
     "prettier": "^1.19.1",
     "protractor": "~5.4.0",
+    "sir-helpalot": "git+https://github.com/0b10/sir-helpalot#master",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
     "typescript": "~3.5.3"

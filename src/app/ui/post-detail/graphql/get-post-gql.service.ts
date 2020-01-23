@@ -8,6 +8,7 @@ import { IGQLPostResponse } from './graphql.types';
 })
 export class GetPostGqlService extends Query<IGQLPostResponse> {
   // TODO: use fragment
+  // TODO: create aria-role field
   document = gql`
     query getPost($id: ID!) {
       post(id: $id) {
