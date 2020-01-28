@@ -1,0 +1,60 @@
+@import "bootstrap";
+
+$bg-color: #111111;
+$fg-color: #222222;
+$black: #000000;
+$primary: #360099;
+$primary-text: white;
+$shadow-color: $black;
+
+// text
+$fg-text: white;
+$header-fonts: Arial, Helvetica, sans-serif;
+$font-size: 100px;
+
+// margins
+$padding: 10px;
+
+// borders
+$border-radius: 3px;
+
+// breakpoints
+$bp-xs: "(min-width: 0px) and (max-width: 600px)";
+$bp-sm: "(min-width: 601px) and (max-width: 1000px)";
+$bp-md: "(min-width: 1001px) and (max-width: 1500px)";
+$bp-lg: "(min-width: 1501px) and (max-width: 2000px)";
+$bp-xl: "(min-width: 2001px)";
+
+@include media-breakpoint-down(sm) {
+  // boostrap headers are too large for small screens
+  h1 {
+    font-size: 1.8rem !important;
+  }
+  h2 {
+    font-size: 1.5rem !important;
+  }
+  h3 {
+    font-size: 1.3rem !important;
+  }
+  h4 {
+    font-size: 1.2rem !important;
+  }
+  h5 {
+    font-size: 1.1rem !important;
+  }
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0px;
+  background-color: $bg-color !important;
+  color: $primary-text !important;
+}
+
+// mixins
+@mixin image-fit() {
+  width: 100%;
+  object-position: 50% 50%;
+  object-fit: cover;
+}

@@ -1,11 +1,4 @@
-import {
-  AfterContentInit,
-  Component,
-  ElementRef,
-  Input,
-  OnDestroy,
-  ViewChild,
-} from '@angular/core';
+import { AfterContentInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { faBars, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -15,7 +8,7 @@ import { INavData } from './navbar.types';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.sass'],
+  styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements AfterContentInit, AfterContentInit, OnDestroy {
   onResize$: Observable<Event>;

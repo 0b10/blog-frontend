@@ -7,7 +7,7 @@ import { PostDetailService } from './post-detail.service';
 @Component({
   selector: 'app-post-detail',
   templateUrl: './post-detail.component.html',
-  styleUrls: ['./post-detail.component.sass'],
+  styleUrls: ['./post-detail.component.scss'],
 })
 export class PostDetailComponent implements OnInit, OnDestroy {
   private postSub: Subscription;

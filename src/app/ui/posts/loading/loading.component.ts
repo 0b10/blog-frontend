@@ -3,7 +3,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 @Component({
   selector: 'app-loading-posts',
   templateUrl: './loading.component.html',
-  styleUrls: ['./loading.component.sass'],
+  styleUrls: ['./loading.component.scss'],
 })
 export class LoadingPostsComponent implements OnInit, OnDestroy {
   public loadPecent = 0;

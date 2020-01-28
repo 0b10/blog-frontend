@@ -14,10 +14,10 @@
     <div class="body-container mx-auto p-4 text-justify">
       <div class="author text-right mb-4">
         <!-- TODO: set role for author -->
-        <span data-testid="meta-data"
-          >Created on {{ service.post.createdAt | date }}, by
-          <strong>{{ service.post.author.alias }}</strong></span
-        >
+        <span data-testid="meta-data">
+          Created on {{ service.post.createdAt | date }}, by
+          <strong>{{ service.post.author.alias }}</strong>
+        </span>
       </div>
       <h2 class="mb-5 text-center">{{ service.post.subtitle }}</h2>
       <div>

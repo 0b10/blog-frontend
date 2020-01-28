@@ -1,0 +1,35 @@
+@import "../../global";
+@import "bootstrap";
+
+._extd-nav-h {
+  @extend .nav;
+  background-color: $primary;
+}
+
+// display vertically
+._extd-nav-v {
+  background-color: $primary;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  @extend .nav;
+}
+
+// VERTICAL::ng-bootstrap overrides
+// wraps the entire accordion
+:host ::ng-deep .card {
+  background-color: $primary;
+}
+
+// wraps navgation items
+:host ::ng-deep .card-body {
+  padding: 0px;
+  padding-top: 35px;
+}
+
+// the accordion header - where the navbar should be
+:host ::ng-deep .card-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+  box-shadow: 0px 3px 10px 2px transparentize($shadow-color, 0.6);
+}

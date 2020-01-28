@@ -4,7 +4,7 @@ import { INavData } from '../navbar.types';
 @Component({
   selector: 'app-navitem',
   templateUrl: './navitem.component.html',
-  styleUrls: ['./navitem.component.sass'],
+  styleUrls: ['./navitem.component.scss'],
 })
 export class NavitemComponent {
   @Input() uri: INavData['uri'];

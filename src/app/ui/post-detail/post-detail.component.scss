@@ -1,0 +1,41 @@
+@import "../global";
+
+.body-container {
+  width: 100%;
+}
+
+@include media-breakpoint-down(sm) {
+  .body-container {
+    width: 100%;
+  }
+  .author {
+    font-size: 0.9rem; // just slightly smaller than normal text
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .body-container {
+    width: 80%;
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .body-container {
+    width: 50%;
+  }
+}
+
+.title {
+  vertical-align: bottom;
+  bottom: 0px;
+  background-color: rgb(1, 1, 1, 0.7);
+}
+
+.header-container {
+  height: 400px;
+}
+
+.fit-image {
+  height: 400px;
+  @include image-fit();
+}

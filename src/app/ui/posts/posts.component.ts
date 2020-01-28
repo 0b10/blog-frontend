@@ -8,7 +8,7 @@ import { IPost, TOrderBy } from './posts.types';
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',
-  styleUrls: ['./posts.component.sass'],
+  styleUrls: ['./posts.component.scss'],
 })
 export class PostsComponent implements OnInit, OnDestroy {
   public querySubscription$: Subscription;
