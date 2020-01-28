@@ -1,0 +1,31 @@
+<nav class="mb-5" aria-label="Primary" #primaryNavBar>
+  <ul class="{{ vertical ? '_extd-nav-v' : '_extd-nav-h' }}" #itemsContainer>
+    <ng-container *ngIf="vertical; else horizontal">
+      <ngb-accordion #acc="ngbAccordion" [activeIds]="activePanelIds">
+        <ngb-panel title="Simple" id="topLevel">
+          <ng-template ngbPanelHeader>
+            <div (click)="togglePanel('topLevel')">
+              <fa-icon [icon]="hamburgerMenuIcon" size="2x"></fa-icon>
+            </div>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <app-navitem
+              *ngFor="let nav of navs"
+              [uri]="nav.uri"
+              [text]="nav.text"
+              [vertical]="vertical"
+            ></app-navitem>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </ng-container>
+    <ng-template #horizontal>
+      <app-navitem
+        *ngFor="let nav of navs"
+        [uri]="nav.uri"
+        [text]="nav.text"
+        [vertical]="vertical"
+      ></app-navitem>
+    </ng-template>
+  </ul>
+</nav>

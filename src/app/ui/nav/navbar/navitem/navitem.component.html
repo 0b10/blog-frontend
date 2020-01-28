@@ -1,0 +1,15 @@
+<div>
+  <a
+    *ngIf="vertical; else horizontal"
+    class="nav-link _base _item-v"
+    routerLink="{{ uri }}"
+    routerLinkActive="_active-v"
+  >
+    <li class="h-100 w-100 va">{{ text }}</li>
+  </a>
+  <ng-template #horizontal>
+    <a class="nav-link _base _item-h" routerLink="{{ uri }}" routerLinkActive="_active-h">
+      <li class="h-100 w-100 va">{{ text }}</li>
+    </a>
+  </ng-template>
+</div>

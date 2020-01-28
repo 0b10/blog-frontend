@@ -51,7 +51,7 @@ const renderComponent = () =>
     ],
   });
 
-fdescribe('PostDetailComponent', () => {
+describe('PostDetailComponent', () => {
   it('should create', async () => {
     const component = await renderComponent();
     expect(component).toBeTruthy();

@@ -1,4 +1,6 @@
 export type TContext =
+  | 'IdParamGuard'
+  | 'NavbarComponent'
   | 'PostDetailComponent'
   | 'PostDetailService'
   | 'PostsComponent'

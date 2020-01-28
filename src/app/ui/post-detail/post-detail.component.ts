@@ -13,14 +13,41 @@ export class PostDetailComponent implements OnInit, OnDestroy {
   private postSub: Subscription;
 
   constructor(
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
     private readonly logger: ConsoleLoggerService,
     public readonly service: PostDetailService
   ) {}
 
+  private isIntString(param: unknown): param is string {
+    return typeof param === 'string' && !!param.match(/^[0-9]+$/);
+  }
+
   ngOnInit() {
-    const id: number = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    const id: number = parseInt(this.activatedRoute.snapshot.paramMap.get('id'), 10);
     this.postSub = this.service.getPostSub(id);
+
+    // handle route changes (params === scoped params Observable)
+    this.activatedRoute.params.subscribe({
+      next: ({ id }) => {
+        this.postSub.unsubscribe();
+
+        // is int
+        if (this.isIntString(id)) {
+          // id could easily be a String(float), or NaN
+          this.postSub = this.service.getPostSub(parseInt(id));
+        } else {
+          this.logger.warn('ngOnInit(): an incorrect id type was given', 'PostDetailComponent');
+          // TODO: some 404 stuff
+        }
+      },
+      error: (error) => {
+        this.logger.error(
+          'ngOnInit(): there was a problem when changing the active route',
+          'PostDetailComponent',
+          { error, activatedRoute: this.activatedRoute }
+        );
+      },
+    });
   }
 
   ngOnDestroy(): void {

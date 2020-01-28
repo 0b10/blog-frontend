@@ -2,9 +2,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GraphQLModule } from './graphql.module';
+import { AppRoutingModule } from './router/app-routing.module';
+import { NavbarModule } from './ui/nav/navbar/navbar.module';
 import { UiModule } from './ui/ui.module';
 import { LoggerModule } from './util/logger';
 
@@ -16,6 +17,7 @@ import { LoggerModule } from './util/logger';
     GraphQLModule,
     HttpClientModule,
     LoggerModule,
+    NavbarModule,
     NgbModule,
     UiModule,
   ],
