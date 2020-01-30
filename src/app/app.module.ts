@@ -4,8 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { GraphQLModule } from './graphql.module';
-import { AppRoutingModule } from './router/app-routing.module';
 import { NavbarModule } from './ui/nav/navbar/navbar.module';
+import { AppRoutingModule } from './ui/router/app-routing.module';
 import { UiModule } from './ui/ui.module';
 import { LoggerModule } from './util/logger';
 

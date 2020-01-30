@@ -1,0 +1,23 @@
+<div class="m-0 mh-100 d-flex flex-column align-items-center">
+  <ng-container *ngIf="status == 'loading'; else notLoading">
+    <div class="mb-2 w-75 _item">
+      <ngb-progressbar
+        height="40px"
+        type="success"
+        [value]="loadPecent"
+        [striped]="true"
+        [animated]="true"
+      >
+      </ngb-progressbar>
+    </div>
+    <p class="text-center _message _item">Loading...</p>
+  </ng-container>
+  <ng-template #notLoading>
+    <div class="mb-2 w-75 _item">
+      <ngb-progressbar height="40px" type="danger" [value]="100">
+        0%
+      </ngb-progressbar>
+    </div>
+    <p class="text-center _message _item">No posts to display :(</p>
+  </ng-template>
+</div>

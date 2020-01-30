@@ -1,0 +1,30 @@
+@import "../../global.scss";
+
+._posts-container {
+  background-color: $bg-color;
+  padding: spacing(3);
+  min-height: 100%;
+  display: grid;
+  width: 100%;
+  grid-gap: 25px;
+  @media #{$bp-xs} {
+    grid-template-columns: repeat(1, 1fr);
+    padding: spacing(2);
+  }
+  @media #{$bp-sm} {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media #{$bp-md} {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media #{$bp-lg} {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media #{$bp-xl} {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+._posts-item {
+  height: 500px;
+}

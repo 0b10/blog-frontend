@@ -1,0 +1,97 @@
+@import "../../global";
+
+@mixin text-basic() {
+  font-size: 1em;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  font-weight: normal;
+}
+
+@mixin text-justify() {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+@mixin spacing-basic() {
+  padding: 10px;
+  margin: 0px;
+}
+
+@mixin shadow() {
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 1);
+}
+
+@mixin image-fit() {
+  width: 100%;
+  object-position: 50% 50%;
+  object-fit: cover;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+}
+
+.card {
+  @include shadow();
+  height: 100%; // use a container, and set dimensions there
+  width: 100%;
+  background: $fg-color;
+  border-radius: $border-radius;
+}
+
+// HEADER
+.header {
+  position: relative;
+  height: 35%;
+}
+
+.image {
+  @include image-fit();
+  height: 100%;
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+}
+
+.title {
+  @include spacing-basic();
+  @include text-basic();
+  font-size: 2em;
+  font-weight: bold;
+  width: 100%;
+  position: absolute;
+  bottom: 0px;
+  background-color: rgba($black, 0.8);
+  max-height: 100%;
+}
+
+// BODY
+.body {
+  height: 65%; // so children height can be set as %
+}
+
+.subtitle {
+  @include spacing-basic();
+  @include text-basic();
+  color: darken(white, 20);
+  font-size: 1.2em;
+  max-height: 35%;
+}
+
+.author {
+  // FIXME: affix a position, this clipped with overflow
+  @include spacing-basic();
+  @include text-basic();
+  text-align: right;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  color: darken(white, 40);
+}
+
+.body-content {
+  @include spacing-basic();
+  @include text-basic();
+  @include text-justify();
+}

@@ -13,7 +13,16 @@ $header-fonts: Arial, Helvetica, sans-serif;
 $font-size: 100px;
 
 // margins
-$padding: 10px;
+$padding: 10px; // FIXME: use spacing
+$spacing: 5px;
+
+@function spacing($factor) {
+  @return 5px * $factor;
+}
+
+@function font-size($factor) {
+  @return 10px * $factor;
+}
 
 // borders
 $border-radius: 3px;
@@ -46,10 +55,10 @@ $bp-xl: "(min-width: 2001px)";
 
 html,
 body {
-  min-height: 100%;
   margin: 0px;
   background-color: $bg-color !important;
   color: $primary-text !important;
+  height: 100%;
 }
 
 // mixins

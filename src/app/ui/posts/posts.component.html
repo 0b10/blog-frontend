@@ -1,9 +1,0 @@
-<app-loading-posts *ngIf="loading" [status]="'loading'"></app-loading-posts>
-<app-loading-posts *ngIf="error || noPosts" [status]="'none'"></app-loading-posts>
-<div class="container" *ngIf="posts">
-  <div class="posts-container">
-    <app-loading-posts *ngIf="noPosts" [status]="'none'"></app-loading-posts>
-    <app-post-summary *ngFor="let post of posts" class="posts-item" [post]="post">
-    </app-post-summary>
-  </div>
-</div>
