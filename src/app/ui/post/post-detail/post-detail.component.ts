@@ -23,7 +23,8 @@ export class PostDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const id: number = parseInt(this.activatedRoute.snapshot.paramMap.get('id'), 10);
+    // FIXME: get returns id or null, set 404 page when it is implemented
+    const id: number = parseInt(this.activatedRoute.snapshot.paramMap.get('id')!, 10);
     this.postSub = this.service.getPostSub(id);
 
     // handle route changes (params === scoped params Observable)

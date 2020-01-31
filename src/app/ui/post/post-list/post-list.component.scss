@@ -1,5 +1,9 @@
 @import "../../global.scss";
 
+:host {
+  height: 100%;
+}
+
 ._posts-container {
   background-color: $bg-color;
   padding: spacing(3);

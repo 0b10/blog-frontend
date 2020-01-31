@@ -11,7 +11,7 @@ import { NavbarComponent } from '../navbar.component';
 import { INavData } from '../navbar.types';
 import { NavitemComponent } from '../navitem/navitem.component';
 
-const DEBUG = true; // enable tracing and logging
+const DEBUG = false; // enable tracing and logging
 
 const getLogger = () => (DEBUG ? ConsoleLoggerService : NoopLoggerService);
 
@@ -81,7 +81,7 @@ const renderComponent = (navs = getFakeNavs()) => {
 //    * the hamburger meny is displayed when the navbar is vertical
 //    * navigation items appear when the hamburger menu is clicked
 //        - routing has already been tested here
-fdescribe('NavbarComponent', () => {
+describe('NavbarComponent', () => {
   it('should initialise', async () => {
     const component = await renderComponent();
     expect(component).toBeTruthy();

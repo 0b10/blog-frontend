@@ -20,8 +20,8 @@ export class IdParamGuard implements CanActivate {
     return this.isValidId(id);
   }
 
-  private isValidId(id: string): boolean {
-    const isValid = this.reIntString.test(id);
+  private isValidId(id: string | null): boolean {
+    const isValid = id === null ? false : this.reIntString.test(id);
     this.logger.debug(`isValidId(): ${isValid} validation result`, 'IdParamGuard', { isValid, id });
     return isValid;
   }

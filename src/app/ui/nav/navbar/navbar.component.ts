@@ -1,4 +1,11 @@
-import { AfterContentInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import { faBars, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -74,16 +81,7 @@ export class NavbarComponent implements AfterContentInit, AfterContentInit, OnDe
   // >>> PRIVATE >>>
   // ~~~ properties ~~~
   private get summedItemsWidth() {
-    // return this.navItemComponent.defaultWidth * this.navs.length;
-    try {
-      return this.defaultItemWidth * 3;
-    } catch (error) {
-      this.logger.error(
-        'summedItemsWidth(): unable to determine navitem defaultWidth via ViewChildren',
-        'NavbarComponent',
-        { error }
-      );
-    }
+    return this.defaultItemWidth * this.navs.length;
   }
 
   private get navBarWidth() {

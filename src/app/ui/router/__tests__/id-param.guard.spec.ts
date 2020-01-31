@@ -27,7 +27,7 @@ const activatedRouteSnapFactory = (id: string) => {
 
 const getFakes = (id: string) => {
   const arSnap = activatedRouteSnapFactory(id);
-  const rsSnap = null as RouterStateSnapshot; // unused, will throw null pointer if it is
+  const rsSnap = (null as unknown) as RouterStateSnapshot; // unused, will throw null pointer if it is
 
   return { arSnap, rsSnap };
 };

@@ -61,7 +61,9 @@ describe('PostDetailComponent', () => {
 
     const component = await renderComponent();
 
-    expect(component.getAllByRole('heading').map((el) => el.textContent.trim())).toContain(title);
+    expect(
+      component.getAllByRole('heading').map((el) => el.textContent && el.textContent.trim())
+    ).toContain(title);
   });
 
   it('should render a subtitle', async () => {
@@ -69,9 +71,9 @@ describe('PostDetailComponent', () => {
 
     const component = await renderComponent();
 
-    expect(component.getAllByRole('heading').map((el) => el.textContent.trim())).toContain(
-      subtitle
-    );
+    expect(
+      component.getAllByRole('heading').map((el) => el.textContent && el.textContent.trim())
+    ).toContain(subtitle);
   });
 
   it('should render a tl;dr section', async () => {

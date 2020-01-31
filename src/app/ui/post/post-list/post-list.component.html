@@ -1,9 +1,17 @@
-<app-progress-bar *ngIf="loading" [status]="'loading'"></app-progress-bar>
-<app-progress-bar *ngIf="error || noPosts" [status]="'none'"></app-progress-bar>
-<div *ngIf="posts">
+<div
+  class="h-100 d-flex flex-column justify-content-center"
+  *ngIf="['init', 'initError', 'noPosts'].includes(status); else initialised"
+  [ngSwitch]="status"
+>
+  <app-progress-bar *ngSwitchCase="'init'" [status]="'loading'"></app-progress-bar>
+  <app-progress-bar *ngSwitchCase="'initError'" [status]="'error'"></app-progress-bar>
+  <app-progress-bar *ngSwitchCase="'noPosts'" [status]="'noPosts'"></app-progress-bar>
+  <app-progress-bar *ngSwitchDefault [status]="'error'"></app-progress-bar>
+</div>
+
+<ng-template #initialised>
   <div class="_posts-container">
-    <app-progress-bar *ngIf="noPosts" [status]="'none'"></app-progress-bar>
     <app-post-summary *ngFor="let post of posts" class="_posts-item" [post]="post">
     </app-post-summary>
   </div>
-</div>
+</ng-template>
