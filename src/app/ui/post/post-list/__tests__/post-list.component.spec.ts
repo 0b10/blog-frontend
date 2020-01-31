@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { render } from '@testing-library/angular';
 import { Subject, Subscription } from 'rxjs';
 import { fixture } from 'sir-helpalot/dist/test';
 import { ConsoleLoggerService } from '../../../../util/logger/console-logger.service';
 import { NoopLoggerService } from '../../../../util/logger/noop-logger.service';
-import { LoadingModule } from '../../../loading/loading.module';
 import { IPost } from '../../post-detail/post-detail.types';
 import { PostSummaryComponent } from '../../post-summary/post-summary.component';
 import { TQueryStatus } from '../graphql/graphql.types';
@@ -78,21 +78,21 @@ class FakePostListService implements IPostListService {
 const renderComponent = (service: FakePostListService = new FakePostListService()) =>
   render(PostListComponent, {
     declarations: [PostSummaryComponent],
-    imports: [CommonModule, LoadingModule],
+    imports: [CommonModule, FontAwesomeModule],
     providers: [
       { provide: PostListService, useFactory: () => service },
       { provide: ConsoleLoggerService, useClass: getLogger() },
     ],
   });
 
-describe('PostListComponent', () => {
+fdescribe('PostListComponent', () => {
   it('should render', async () => {
     const component = await renderComponent();
     expect(component).toBeTruthy();
   });
 
   it('should display "Loading..." progress bar when the query status is initially "loading"', async () => {
-    const expectedMessage = 'Loading...'; // Change me if the message changes.
+    const expectedMessage = 'Loading...';
 
     const service = new FakePostListService();
     service.queryStatus = 'loading';
@@ -101,8 +101,18 @@ describe('PostListComponent', () => {
     expect(component.getByText(expectedMessage)).toBeTruthy();
   });
 
-  it('should display a "no posts" progress bar/message when there\'s no posts and an error', async () => {
-    const expectedMessage = 'No posts to display :('; // Change me if the message changes.
+  it('should display a "no posts" when status is loaded, but no posts present', async () => {
+    const expectedMessage = /No posts to display :\(/;
+
+    const service = new FakePostListService();
+    service.queryStatus = 'loaded';
+    const component = await renderComponent(service);
+
+    expect(component.getByText(expectedMessage)).toBeTruthy();
+  });
+
+  it('should display a "error" when status is initError', async () => {
+    const expectedMessage = /There was an error while loading posts/;
 
     const service = new FakePostListService();
     service.queryStatus = 'error';
@@ -112,7 +122,7 @@ describe('PostListComponent', () => {
   });
 
   it('should display posts when posts are received', async () => {
-    const expectedMessage = /fake title/; // Change me if the message changes.
+    const expectedMessage = /fake title/;
     const expectedNumPosts = getFakePosts().length;
 
     const service = new FakePostListService();

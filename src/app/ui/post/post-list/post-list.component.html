@@ -3,10 +3,22 @@
   *ngIf="['init', 'initError', 'noPosts'].includes(status); else initialised"
   [ngSwitch]="status"
 >
-  <app-progress-bar *ngSwitchCase="'init'" [status]="'loading'"></app-progress-bar>
-  <app-progress-bar *ngSwitchCase="'initError'" [status]="'error'"></app-progress-bar>
-  <app-progress-bar *ngSwitchCase="'noPosts'" [status]="'noPosts'"></app-progress-bar>
-  <app-progress-bar *ngSwitchDefault [status]="'error'"></app-progress-bar>
+  <div *ngSwitchCase="'init'" class="h-100 d-flex flex-column justify-content-center">
+    <div class="d-flex flex-column align-items-center">
+      <fa-icon class="_info" [icon]="spinnerIcon" size="3x" [spin]="true" [pulse]="true"></fa-icon>
+      <span class="mt-3 pl-3">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngSwitchCase="'initError'" class="d-flex flex-column align-items-center">
+    <fa-icon [icon]="errorIcon" size="3x" class="_danger"></fa-icon>
+    <span class="mt-3 pl-3">There was an error while loading posts</span>
+  </div>
+
+  <div *ngSwitchCase="'noPosts'" class="d-flex flex-column align-items-center">
+    <fa-icon [icon]="warningIcon" size="3x" class="_warning"></fa-icon>
+    <span class="mt-3">No posts to display :(</span>
+  </div>
 </div>
 
 <ng-template #initialised>

@@ -1,4 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  faExclamationCircle,
+  faExclamationTriangle,
+  faSpinner,
+  IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { ConsoleLoggerService } from '../../../util/logger/console-logger.service';
 import { IPost } from '../post-detail/post-detail.types';
@@ -15,6 +21,9 @@ export class PostListComponent implements OnInit, OnDestroy {
   private _queryStatusSub$: Subscription;
   private _initialising = true; // true when posts is being initialised/reinitialised.
   public posts: IPost[] = [];
+  public warningIcon: IconDefinition = faExclamationTriangle;
+  public errorIcon: IconDefinition = faExclamationCircle;
+  public spinnerIcon: IconDefinition = faSpinner;
 
   constructor(
     private readonly postListService: PostListService,
