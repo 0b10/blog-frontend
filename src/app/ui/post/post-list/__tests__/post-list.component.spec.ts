@@ -85,7 +85,7 @@ const renderComponent = (service: FakePostListService = new FakePostListService(
     ],
   });
 
-fdescribe('PostListComponent', () => {
+describe('PostListComponent', () => {
   it('should render', async () => {
     const component = await renderComponent();
     expect(component).toBeTruthy();

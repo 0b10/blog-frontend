@@ -925,6 +925,11 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
+"@juggle/resize-observer@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.0.2.tgz#f4f326806826c0da5221411374e4c54902c327bb"
+  integrity sha512-9fEfZIxZ1qTahMSX50pigfSJ/1N6X2oABhmgd4Dt2SsPkZi0lTlvoHu5V2yrGZ6m+oALfS4tJrpx9nbVIxwOYQ==
+
 "@kbrandwijk/swagger-to-graphql@2.4.3":
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/@kbrandwijk/swagger-to-graphql/-/swagger-to-graphql-2.4.3.tgz#7c0fb2410eb0b6b9cc81fad28cc20f9386153cf1"

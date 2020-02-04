@@ -1,4 +1,7 @@
 export type TContext =
+  | 'ElementWidthDirective'
+  | 'ElementWidthService'
+  | 'FakeComponent'
   | 'IdParamGuard'
   | 'NavbarComponent'
   | 'PostDetailComponent'
