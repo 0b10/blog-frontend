@@ -1,6 +1,6 @@
 import { Directive, ElementRef, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { ResizeObserver } from '@juggle/resize-observer';
-import { ConsoleLoggerService } from '../../util/logger/console-logger.service';
+import { ConsoleLoggerService } from '../../../util/logger/console-logger.service';
 
 @Directive({
   selector: '[elementWidth]',

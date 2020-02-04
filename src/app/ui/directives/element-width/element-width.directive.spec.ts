@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ConsoleLoggerService } from '../../util/logger/console-logger.service';
-import { NoopLoggerService } from '../../util/logger/noop-logger.service';
+import { ConsoleLoggerService } from '../../../util/logger/console-logger.service';
+import { NoopLoggerService } from '../../../util/logger/noop-logger.service';
 import { ElementWidthDirective } from './element-width.directive';
 
 const DEBUG = true;
