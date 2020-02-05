@@ -18,18 +18,19 @@ const getLogger = () => (DEBUG ? ConsoleLoggerService : NoopLoggerService);
       [ngStyle]="{ 'width.px': width }"
       (elementWidth)="onWidthChange($event)"
       (click)="onClick()"
+      id="idOne"
     >
       fake content
     </div>
-    <span [ngStyle]="{ 'width.px': width }" (elementWidth)="onSecondWidthChange($event)">
+    <span [ngStyle]="{ 'width.px': width }" (elementWidth)="onSecondWidthChange($event)" id="idTwo">
       fake content two
     </span>
   `,
 })
 class FakeComponent implements AfterViewInit {
   public width = INITIAL_WIDTH;
-  public symbolOne: Symbol;
-  public symbolTwo: Symbol;
+  public idOne: string | null;
+  public idTwo: string | null;
 
   constructor(private _elRef: ElementRef<HTMLElement>, private _logger: ConsoleLoggerService) {}
 
@@ -44,24 +45,25 @@ class FakeComponent implements AfterViewInit {
     this.width = newWidth;
   }
 
-  public onWidthChange({ width: newWidth, symbol }: IEvent) {
+  public onWidthChange({ width: newWidth, id }: IEvent) {
     this._logger.debug(`onWidthChange(): width changed to ${newWidth}px`, 'FakeComponent', {
       oldWidth: this.width,
       newWidth,
+      id,
     });
     this.width = newWidth;
-    this.symbolOne = symbol;
+    this.idOne = id;
   }
 
-  public onSecondWidthChange({ symbol }: IEvent) {
+  public onSecondWidthChange({ id }: IEvent) {
     this._logger.debug(
-      `onSecondWidthChange(): width not changed, symbol emitted instead`,
+      `onSecondWidthChange(): width not changed, id emitted instead`,
       'FakeComponent',
       {
-        symbol,
+        id,
       }
     );
-    this.symbolTwo = symbol;
+    this.idTwo = id;
   }
 
   ngAfterViewInit(): void {
@@ -108,21 +110,25 @@ const getFixture = () => {
   return { fixture, component, contentOne, contentTwo };
 };
 
-describe('ElementWidthDirective - getFixture()', () => {
+describe('ElesmentWidthDirective - getFixture()', () => {
   it('should produce a fake fixture', () => {
-    expect(getFixture().fixture).toBeDefined();
+    expect(getFixture().fixture).toBeDefined('the fixture should be defined');
   });
 
   it('should produce a fake component', () => {
-    expect(getFixture().component).toBeDefined();
+    expect(getFixture().component).toBeDefined('the component should be defined');
   });
 
-  it('should produce a content object with elements, and a "click" event dispatcher', () => {
-    const { contentOne } = getFixture();
-    expect(contentOne).toBeDefined();
-    expect(contentOne.native).toBeDefined();
-    expect(contentOne.debug).toBeDefined();
-    expect(contentOne.click).toBeDefined();
+  it('should produce content objects with elements, and a "click" event dispatcher', () => {
+    const { contentOne, contentTwo } = getFixture();
+    expect(contentOne).toBeDefined('contentOne should be defined');
+    expect(contentOne.native).toBeDefined('a native element object should exists for contentOne');
+    expect(contentOne.debug).toBeDefined('a debug element object should exist for contentOne');
+    expect(contentOne.click).toBeDefined('a click() event dispatcher should exist for contentOne');
+
+    expect(contentTwo).toBeDefined('contentTwo should be defined');
+    expect(contentTwo.native).toBeDefined('a native element object should exist for contentTwo');
+    expect(contentTwo.debug).toBeDefined('a debug element object should exist for contentTwo');
   });
 });
 
@@ -134,8 +140,11 @@ describe('ElementWidthDirective', () => {
 
       fixture.detectChanges();
 
-      expect(component.width).toBe(expected); // component width property
-      expect(contentOne.native.offsetWidth).toBe(expected); // element width
+      expect(component.width).toBe(expected, 'component width should be 200'); // component width property
+      expect(contentOne.native.offsetWidth).toBe(
+        expected,
+        'offsetWidth should match component width'
+      ); // element width
     });
 
     it('should be changed when the element width has changed', async () => {
@@ -145,57 +154,59 @@ describe('ElementWidthDirective', () => {
       contentOne.click();
       fixture.detectChanges();
 
-      expect(component.width).toBe(expected); // component width property
-      expect(contentOne.native.offsetWidth).toBe(expected); // element width
+      expect(component.width).toBe(expected, 'component width should be 200/2'); // component width property
+      expect(contentOne.native.offsetWidth).toBe(
+        expected,
+        'offsetWidth should match component.width'
+      ); // element width
     });
   });
 
-  describe('symbol', () => {
+  describe('id', () => {
     it('should be emitted initially, before any width change events occur', async () => {
       const { component, fixture } = getFixture();
 
       fixture.detectChanges();
 
-      expect(typeof component.symbolOne).toBe(typeof Symbol());
+      expect(component.idOne).toBe('idOne', 'idOne should be initially emitted as string: "idOne"');
     });
 
-    it('should beemitted after a width change event', async () => {
+    it('should be emitted after a width change event', async () => {
       const { component, contentOne, fixture } = getFixture();
 
       contentOne.click();
       fixture.detectChanges();
 
-      expect(typeof component.symbolOne).toBe(typeof Symbol());
+      expect(component.idOne).toBe('idOne', 'idOne should be a string: "idOne"');
     });
 
-    it('should always be the same reference for the same instance', async () => {
+    it('should always be the same after multiple emits', async () => {
       const { component, contentOne, fixture } = getFixture();
 
       contentOne.click();
       fixture.detectChanges();
-      const first = component.symbolOne;
+      const first = component.idOne;
+      expect(first).toBe('idOne', 'idOne should be a string: "idOne"');
 
       contentOne.click();
       fixture.detectChanges();
-      const second = component.symbolOne;
+      const second = component.idOne;
 
-      expect(first).toEqual(second);
+      expect(first).toEqual(second, 'idOne should be the same between emits');
     });
 
-    it('shoulds be a unique reference for each unique instance of the directive', async () => {
+    it('should be different for different elements', async () => {
       const { component, contentOne, fixture } = getFixture();
 
       contentOne.click();
       fixture.detectChanges();
 
       // ! will be undefined if detectChanges() isn't run first
-      const first = component.symbolOne;
-      const second = component.symbolTwo;
+      const first = component.idOne;
+      const second = component.idTwo;
 
-      expect(typeof first).toBe(typeof Symbol(), 'symbolOne should be a symbol');
-      expect(typeof second).toBe(typeof Symbol(), 'symbolTwo should be a symbol');
-
-      expect(first).not.toEqual(second, 'The symbols should not be the same reference');
+      expect(first).toBe('idOne', 'idOne should be a string: "idOne"');
+      expect(second).toBe('idTwo', 'idTwo should be a string: "idTwo"');
     });
   });
 });
