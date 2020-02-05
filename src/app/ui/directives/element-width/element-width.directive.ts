@@ -7,6 +7,7 @@ import { ConsoleLoggerService } from '../../../util/logger/console-logger.servic
 })
 export class ElementWidthDirective implements OnDestroy, OnInit {
   private _observer: ResizeObserver;
+  private _symbol = Symbol();
   @Output()
   public elementWidth = new EventEmitter();
 
@@ -33,7 +34,7 @@ export class ElementWidthDirective implements OnDestroy, OnInit {
           observer,
         }
       );
-      this.elementWidth.emit(width);
+      this.elementWidth.emit({ width, symbol: this._symbol });
     });
 
     this._observer.observe(this._elRef.nativeElement, { box: 'border-box' });
@@ -46,7 +47,9 @@ export class ElementWidthDirective implements OnDestroy, OnInit {
       'ElementWidthDirective',
       { initialWidth }
     );
-    this.elementWidth.emit(initialWidth);
+
+    // ! an initial value MUST be emitted
+    this.elementWidth.emit({ width: initialWidth, symbol: this._symbol });
   }
 
   ngOnDestroy(): void {
