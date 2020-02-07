@@ -13,24 +13,42 @@ const INITIAL_WIDTH = 200;
 const getLogger = () => (DEBUG ? ConsoleLoggerService : NoopLoggerService);
 
 @Component({
+  selector: 'stub-component',
+  template: '<p class=".stub-p">stub component</p>',
+  styles: [':host { display: block; }'], // host components are displau: inline by default, can't get width from inline
+})
+class StubComponent {}
+
+@Component({
   template: `
-    <div
-      [ngStyle]="{ 'width.px': width }"
-      (elementWidth)="onWidthChange($event)"
-      (click)="onClick()"
-      id="idOne"
-    >
+    <div (click)="onClick()">
+      <pre [ngStyle]="{ 'width.px': width }" (elementWidth)="onWidthChange($event)" id="idOne">
       fake content
+      </pre
+      >
+      <span
+        [ngStyle]="{ 'width.px': width }"
+        (elementWidth)="onSecondWidthChange($event)"
+        id="idTwo"
+      >
+        fake content two
+      </span>
+      <stub-component
+        class=".stub"
+        [ngStyle]="{ 'width.px': width }"
+        (elementWidth)="onStubComponentResize($event)"
+        id="stubComponentId"
+      ></stub-component>
     </div>
-    <span [ngStyle]="{ 'width.px': width }" (elementWidth)="onSecondWidthChange($event)" id="idTwo">
-      fake content two
-    </span>
   `,
 })
 class FakeComponent implements AfterViewInit {
   public width = INITIAL_WIDTH;
   public idOne: string | null;
   public idTwo: string | null;
+
+  public stubComponentId: string | null;
+  public stubComponentWidth: number;
 
   constructor(private _elRef: ElementRef<HTMLElement>, private _logger: ConsoleLoggerService) {}
 
@@ -66,6 +84,15 @@ class FakeComponent implements AfterViewInit {
     this.idTwo = id;
   }
 
+  public onStubComponentResize({ width, id }: IEvent) {
+    this._logger.debug(`onStubComponentResize(): id and width emitted`, 'FakeComponent', {
+      width,
+      id,
+    });
+    this.stubComponentId = id;
+    this.stubComponentWidth = width;
+  }
+
   ngAfterViewInit(): void {
     const { clientWidth, offsetWidth } = this._elRef.nativeElement;
     this._logger.debug(
@@ -79,56 +106,90 @@ class FakeComponent implements AfterViewInit {
 /**
  * Produce a component, fixture, and objects related to the element with the directive - like
  *  the nativElement, and debugElement objects, and also a click event dispatcher (which changes
- *  the width). Two separate elements are also provided - contentOne, contentTwo
+ *  the width). Two separate elements are also provided - elementOne, elementTwo
  */
-const getFixture = () => {
+const getFakeFixture = () => {
   const fixture = TestBed.configureTestingModule({
     imports: [CommonModule],
-    declarations: [ElementWidthDirective, FakeComponent],
+    declarations: [ElementWidthDirective, FakeComponent, StubComponent],
     providers: [{ provide: ConsoleLoggerService, useClass: getLogger() }],
   }).createComponent(FakeComponent);
 
   const component = fixture.componentInstance;
+
+  // container
+  const containerDebugEl = fixture.debugElement.query(By.css('div'));
+  const containerNativeEl: HTMLDivElement = containerDebugEl.nativeElement;
   // content one
-  const contentDebugEl = fixture.debugElement.query(By.css('div'));
-  const contentNativeElement: HTMLDivElement = contentDebugEl.nativeElement;
+  const elementOneDebugEl = fixture.debugElement.query(By.css('pre'));
+  const elementOneNativeEl: HTMLPreElement = elementOneDebugEl.nativeElement;
   // content two
-  const contentTwoDebugEl = fixture.debugElement.query(By.css('span'));
-  const contentTwoNativeElement: HTMLDivElement = contentTwoDebugEl.nativeElement;
+  const elementTwoDebugEl = fixture.debugElement.query(By.css('span'));
+  const elementTwoNativeEl: HTMLSpanElement = elementTwoDebugEl.nativeElement;
+  // stub-component
+  const stubComponentDebugEl = fixture.debugElement.query(By.css('p'));
 
-  const contentOne = {
-    debug: contentDebugEl,
-    native: contentNativeElement,
-    click: () => contentDebugEl.triggerEventHandler('click', null),
+  const container = {
+    debug: containerDebugEl,
+    native: containerNativeEl,
+    click: () => containerDebugEl.triggerEventHandler('click', null),
   };
 
-  const contentTwo = {
-    debug: contentTwoDebugEl,
-    native: contentTwoNativeElement,
+  const elementOne = {
+    debug: elementOneDebugEl,
+    native: elementOneNativeEl,
   };
 
-  return { fixture, component, contentOne, contentTwo };
+  const elementTwo = {
+    debug: elementTwoDebugEl,
+    native: elementTwoNativeEl,
+  };
+
+  const stubComponentHostEl = {
+    debug: stubComponentDebugEl,
+  };
+
+  return {
+    component,
+    container,
+    elementOne,
+    elementTwo,
+    fixture,
+    stubComponentHostEl,
+  };
 };
 
-describe('ElesmentWidthDirective - getFixture()', () => {
+describe('ElementWidthDirective - getFixture()', () => {
   it('should produce a fake fixture', () => {
-    expect(getFixture().fixture).toBeDefined('the fixture should be defined');
+    expect(getFakeFixture().fixture).toBeDefined('the fixture should be defined');
   });
 
   it('should produce a fake component', () => {
-    expect(getFixture().component).toBeDefined('the component should be defined');
+    expect(getFakeFixture().component).toBeDefined('the component should be defined');
   });
 
-  it('should produce content objects with elements, and a "click" event dispatcher', () => {
-    const { contentOne, contentTwo } = getFixture();
-    expect(contentOne).toBeDefined('contentOne should be defined');
-    expect(contentOne.native).toBeDefined('a native element object should exists for contentOne');
-    expect(contentOne.debug).toBeDefined('a debug element object should exist for contentOne');
-    expect(contentOne.click).toBeDefined('a click() event dispatcher should exist for contentOne');
+  it('should produce all the appropriate fixture objects', () => {
+    const { elementOne, elementTwo, stubComponentHostEl, container } = getFakeFixture();
 
-    expect(contentTwo).toBeDefined('contentTwo should be defined');
-    expect(contentTwo.native).toBeDefined('a native element object should exist for contentTwo');
-    expect(contentTwo.debug).toBeDefined('a debug element object should exist for contentTwo');
+    // container
+    expect(container).toBeDefined('the container should be defined');
+    expect(container.click).toBeDefined('a click() event dispatcher should exist for container');
+
+    // element one
+    expect(elementOne).toBeDefined('elementOne should be defined');
+    expect(elementOne.native).toBeDefined('a native element object should exists for elementOne');
+    expect(elementOne.debug).toBeDefined('a debug element object should exist for elementOne');
+
+    // element two
+    expect(elementTwo).toBeDefined('elementTwo should be defined');
+    expect(elementTwo.native).toBeDefined('a native element object should exist for elementTwo');
+    expect(elementTwo.debug).toBeDefined('a debug element object should exist for elementTwo');
+
+    // stub component
+    expect(stubComponentHostEl).toBeDefined('stubComponentHostEl should be defined');
+    expect(stubComponentHostEl.debug).toBeDefined(
+      'a debug element object should exist for stubComponentHostEl'
+    );
   });
 });
 
@@ -136,12 +197,12 @@ describe('ElementWidthDirective', () => {
   describe('width', () => {
     it('should be emitted initially, before any width change events occur', async () => {
       const expected = INITIAL_WIDTH;
-      const { component, contentOne, fixture } = getFixture();
+      const { component, elementOne, fixture } = getFakeFixture();
 
       fixture.detectChanges();
 
       expect(component.width).toBe(expected, 'component width should be 200'); // component width property
-      expect(contentOne.native.offsetWidth).toBe(
+      expect(elementOne.native.offsetWidth).toBe(
         expected,
         'offsetWidth should match component width'
       ); // element width
@@ -149,13 +210,13 @@ describe('ElementWidthDirective', () => {
 
     it('should be changed when the element width has changed', async () => {
       const expected = INITIAL_WIDTH / 2; // a click should halve the width
-      const { component, contentOne, fixture } = getFixture();
+      const { component, elementOne, fixture, container } = getFakeFixture();
 
-      contentOne.click();
+      container.click();
       fixture.detectChanges();
 
       expect(component.width).toBe(expected, 'component width should be 200/2'); // component width property
-      expect(contentOne.native.offsetWidth).toBe(
+      expect(elementOne.native.offsetWidth).toBe(
         expected,
         'offsetWidth should match component.width'
       ); // element width
@@ -164,7 +225,7 @@ describe('ElementWidthDirective', () => {
 
   describe('id', () => {
     it('should be emitted initially, before any width change events occur', async () => {
-      const { component, fixture } = getFixture();
+      const { component, fixture } = getFakeFixture();
 
       fixture.detectChanges();
 
@@ -172,23 +233,23 @@ describe('ElementWidthDirective', () => {
     });
 
     it('should be emitted after a width change event', async () => {
-      const { component, contentOne, fixture } = getFixture();
+      const { component, elementOne, fixture, container } = getFakeFixture();
 
-      contentOne.click();
+      container.click();
       fixture.detectChanges();
 
       expect(component.idOne).toBe('idOne', 'idOne should be a string: "idOne"');
     });
 
     it('should always be the same after multiple emits', async () => {
-      const { component, contentOne, fixture } = getFixture();
+      const { component, elementOne, fixture, container } = getFakeFixture();
 
-      contentOne.click();
+      container.click();
       fixture.detectChanges();
       const first = component.idOne;
       expect(first).toBe('idOne', 'idOne should be a string: "idOne"');
 
-      contentOne.click();
+      container.click();
       fixture.detectChanges();
       const second = component.idOne;
 
@@ -196,9 +257,9 @@ describe('ElementWidthDirective', () => {
     });
 
     it('should be different for different elements', async () => {
-      const { component, contentOne, fixture } = getFixture();
+      const { component, container, fixture } = getFakeFixture();
 
-      contentOne.click();
+      container.click();
       fixture.detectChanges();
 
       // ! will be undefined if detectChanges() isn't run first
@@ -207,6 +268,51 @@ describe('ElementWidthDirective', () => {
 
       expect(first).toBe('idOne', 'idOne should be a string: "idOne"');
       expect(second).toBe('idTwo', 'idTwo should be a string: "idTwo"');
+    });
+  });
+
+  describe('component hosts', () => {
+    it("should initially emit an id, when it's set", () => {
+      const { component, fixture } = getFakeFixture();
+      fixture.detectChanges();
+      expect(component.stubComponentId).toBe(
+        'stubComponentId',
+        'stubComponentId should be set to stubComponentId'
+      );
+    });
+
+    it('should emit an id, when the width is changed', () => {
+      const { component, fixture, container } = getFakeFixture();
+      container.click();
+      fixture.detectChanges();
+      expect(component.stubComponentId).toBe(
+        'stubComponentId',
+        'stubComponentId should be set to stubComponentId'
+      );
+    });
+
+    it('should initially emit a width', () => {
+      const { component, fixture } = getFakeFixture();
+      fixture.detectChanges();
+      expect(component.stubComponentWidth).toBeDefined(
+        'stubComponentWidth should be a number (width)'
+      );
+      expect(component.stubComponentWidth).toBeGreaterThan(
+        0,
+        'stubComponentWidth should be initialised to a width > 0'
+      );
+    });
+
+    it("should emit an updated width when it's width changes", () => {
+      const { component, fixture, container } = getFakeFixture();
+
+      container.click();
+      fixture.detectChanges();
+
+      expect(component.stubComponentWidth).toEqual(
+        INITIAL_WIDTH / 2,
+        'stubComponentWidth should have changed after a click()'
+      );
     });
   });
 });
