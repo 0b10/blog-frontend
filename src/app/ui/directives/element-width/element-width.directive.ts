@@ -1,12 +1,4 @@
-import {
-  Attribute,
-  Directive,
-  ElementRef,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Directive, ElementRef, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { ResizeObserver } from '@juggle/resize-observer';
 import { ConsoleLoggerService } from '../../../util/logger/console-logger.service';
 
@@ -21,14 +13,13 @@ export class ElementWidthDirective implements OnDestroy, OnInit {
 
   constructor(
     private readonly _elRef: ElementRef<HTMLElement>,
-    private readonly _logger: ConsoleLoggerService,
-    @Attribute('id') id: string
-  ) {
-    this._id = id;
-  }
+    private readonly _logger: ConsoleLoggerService
+  ) {}
 
   ngOnInit(): void {
     this._logger.warn('ngOnInit(): using a "polyfilled" ResizeObserver', 'ElementWidthDirective');
+
+    this._id = this._elRef.nativeElement.getAttribute('id');
 
     // POLYFILL: ResizeObserver
     // not really a polyfill, but not using the native API either.

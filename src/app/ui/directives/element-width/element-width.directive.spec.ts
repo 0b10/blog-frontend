@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ConsoleLoggerService } from '../../../util/logger/console-logger.service';
@@ -33,6 +33,8 @@ class StubComponent {}
       >
         fake content two
       </span>
+      <!-- use interpolation here, it's specifically tested -->
+      <ul (elementWidth)="onThirdWidthChange($event)" id="{{ providedIdForElementThree }}"></ul>
       <stub-component
         class=".stub"
         [ngStyle]="{ 'width.px': width }"
@@ -46,6 +48,10 @@ class FakeComponent implements AfterViewInit {
   public width = INITIAL_WIDTH;
   public idOne: string | null;
   public idTwo: string | null;
+  public idThree: string | null;
+
+  @Input()
+  providedIdForElementThree: string;
 
   public stubComponentId: string | null;
   public stubComponentWidth: number;
@@ -93,6 +99,14 @@ class FakeComponent implements AfterViewInit {
     this.stubComponentWidth = width;
   }
 
+  public onThirdWidthChange({ width, id }: IEvent) {
+    this._logger.debug(`onThirdWidthChange(): id and width emitted`, 'FakeComponent', {
+      width,
+      id,
+    });
+    this.idThree = id;
+  }
+
   ngAfterViewInit(): void {
     const { clientWidth, offsetWidth } = this._elRef.nativeElement;
     this._logger.debug(
@@ -126,6 +140,9 @@ const getFakeFixture = () => {
   // content two
   const elementTwoDebugEl = fixture.debugElement.query(By.css('span'));
   const elementTwoNativeEl: HTMLSpanElement = elementTwoDebugEl.nativeElement;
+  // content two
+  const elementThreeDebugEl = fixture.debugElement.query(By.css('ul'));
+  const elementThreeNativeEl: HTMLSpanElement = elementTwoDebugEl.nativeElement;
   // stub-component
   const stubComponentDebugEl = fixture.debugElement.query(By.css('p'));
 
@@ -145,6 +162,11 @@ const getFakeFixture = () => {
     native: elementTwoNativeEl,
   };
 
+  const elementThree = {
+    debug: elementThreeDebugEl,
+    native: elementThreeNativeEl,
+  };
+
   const stubComponentHostEl = {
     debug: stubComponentDebugEl,
   };
@@ -154,6 +176,7 @@ const getFakeFixture = () => {
     container,
     elementOne,
     elementTwo,
+    elementThree,
     fixture,
     stubComponentHostEl,
   };
@@ -169,7 +192,13 @@ describe('ElementWidthDirective - getFixture()', () => {
   });
 
   it('should produce all the appropriate fixture objects', () => {
-    const { elementOne, elementTwo, stubComponentHostEl, container } = getFakeFixture();
+    const {
+      elementOne,
+      elementTwo,
+      elementThree,
+      stubComponentHostEl,
+      container,
+    } = getFakeFixture();
 
     // container
     expect(container).toBeDefined('the container should be defined');
@@ -184,6 +213,13 @@ describe('ElementWidthDirective - getFixture()', () => {
     expect(elementTwo).toBeDefined('elementTwo should be defined');
     expect(elementTwo.native).toBeDefined('a native element object should exist for elementTwo');
     expect(elementTwo.debug).toBeDefined('a debug element object should exist for elementTwo');
+
+    // element three
+    expect(elementThree).toBeDefined('elementThree should be defined');
+    expect(elementThree.native).toBeDefined(
+      'a native element object should exist for elementThree'
+    );
+    expect(elementThree.debug).toBeDefined('a debug element object should exist for elementThree');
 
     // stub component
     expect(stubComponentHostEl).toBeDefined('stubComponentHostEl should be defined');
@@ -313,6 +349,17 @@ describe('ElementWidthDirective', () => {
         INITIAL_WIDTH / 2,
         'stubComponentWidth should have changed after a click()'
       );
+    });
+  });
+
+  describe('getting an id from interpolation or host prop', () => {
+    it('should be initialised, and not be null', () => {
+      const expectedId = 'elementThreeId';
+
+      const { component, fixture } = getFakeFixture();
+      component.providedIdForElementThree = expectedId;
+      fixture.detectChanges();
+      expect(component.idThree).toBe(expectedId, `the emitted id should be: ${expectedId}`);
     });
   });
 });
