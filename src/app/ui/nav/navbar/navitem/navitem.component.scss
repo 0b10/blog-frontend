@@ -1,4 +1,4 @@
-@import "../../../global";
+@import '../../../global';
 
 ._base {
   outline: none;
@@ -11,7 +11,7 @@
 }
 
 ._item-h {
-  width: 170px; // ! if you change this value, you must change it in the navitem component too
+  width: 170px;
   > li {
     text-align: center;
   }

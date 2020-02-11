@@ -1,147 +1,88 @@
-import {
-  AfterContentInit,
-  Component,
-  ElementRef,
-  Input,
-  OnDestroy,
-  ViewChild,
-} from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, Input } from '@angular/core';
 import { faBars, IconDefinition } from '@fortawesome/free-solid-svg-icons';
-import { fromEvent, Observable, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 import { ConsoleLoggerService } from '../../../util/logger/console-logger.service';
-import { INavData } from './navbar.types';
+import { IEvent } from '../../directives/element-width/element-width.types';
+import { INavData, INavDataWithId } from './navbar.types';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })
-export class NavbarComponent implements AfterContentInit, AfterContentInit, OnDestroy {
-  onResize$: Observable<Event>;
-  onResizeSub$: Subscription;
-  activePanelIds: string[] = [];
-  hamburgerMenuIcon: IconDefinition = faBars;
-  vertical: boolean;
-  @Input() navs: INavData[] = []; // this.navs.length on undefined is not good
-  @ViewChild('primaryNavBar', { static: true }) navBarEl: ElementRef<HTMLElement>;
+export class NavbarComponent implements AfterContentInit, AfterViewInit {
+  public activePanelIds: string[] = [];
+  public hamburgerMenuIcon: IconDefinition = faBars;
+  public vertical: boolean;
+  @Input() public navs: INavData[] = []; // this.navs.length on undefined is not good
+  private _navsWithId: INavDataWithId[] = [];
 
-  // ! this must match the width in the ._item-h navitem css class - change that too if you change this
-  // must be a static value, don't derive this from the real value.
-  private readonly defaultItemWidth = 170;
+  public get navsWithId() {
+    if (this._navsWithId.length === 0) {
+      // initialise with an id
+      this._navsWithId = this.navs.map(({ text, uri }) => {
+        const rando = Math.random()
+          .toString(36)
+          .substring(7);
+        return { text, uri, id: `navitem${rando}` };
+      });
+    }
+    return this._navsWithId;
+  }
 
-  constructor(private readonly logger: ConsoleLoggerService) {}
+  private _navbarWidth: number;
+  private _navitemWidths: Record<string, number> = {};
 
-  togglePanel(panelId: string) {
+  private get _summedNavitemWidths(): number {
+    return Object.values(this._navitemWidths).reduce((prev, curr) => {
+      return prev + curr;
+    }, 0);
+  }
+
+  constructor(private readonly _logger: ConsoleLoggerService) {}
+
+  public togglePanel(panelId: string) {
     this.isPanelOpen(panelId) ? this.closePanel(panelId) : this.openPanel(panelId);
   }
 
-  ngAfterViewInit(): void {
-    this.logger.debug(
-      'ngAfterViewInit(): registering resize observable for navbar',
-      'NavbarComponent'
-    );
-
-    this.onResize$ = fromEvent(window, 'resize');
-    this.onResizeSub$ = this.onResize$.pipe(debounceTime(100)).subscribe({
-      next: () => this.toggleDisplayAxis(),
-      error: (error) => {
-        this.logger.error(
-          'onResize$::error(): there was an error with the window resize observable',
-          'NavbarComponent',
-          { error, ...this.getLoggedVars() }
-        );
-      },
-    });
+  public onNavbarResize({ width: navbarWidth }: IEvent) {
+    this._navbarWidth = navbarWidth;
+    this.toggleDisplayAxis();
   }
 
-  ngAfterContentInit() {
-    if (this.navs.length === 0) {
-      this.logger.warn('ngAfterContentInit(): navbar items have not been set', 'NavbarComponent');
+  public onNavitemResize({ width: navitemWidth, id }: IEvent) {
+    // FIXME: use toggle here too, because nav items might also change in size
+    if (typeof id === 'string') {
+      this._navitemWidths[id] = navitemWidth;
     }
+  }
 
-    this.logger.debug(
-      `ngAfterContentInit(): setting initial navbar orientation to ${
-        this.vertical ? 'vertical' : 'horizontal'
-      }`,
-      'NavbarComponent',
-      this.getLoggedVars()
-    );
+  public ngAfterContentInit() {
+    if (this.navs.length === 0) {
+      this._logger.warn('ngAfterContentInit(): navbar items have not been set', 'NavbarComponent');
+    }
     this.toggleDisplayAxis(); // this means an appropriate display is used initially
   }
 
-  ngOnDestroy(): void {
-    this.logger.debug(
-      'ngOnDestroy(): unsubscribing from resize observable for navbar',
-      'NavbarComponent'
-    );
-    this.onResizeSub$.unsubscribe();
-  }
+  public ngAfterViewInit() {}
 
-  // >>> PRIVATE >>>
-  // ~~~ properties ~~~
-  private get summedItemsWidth() {
-    return this.defaultItemWidth * this.navs.length;
-  }
-
-  private get navBarWidth() {
-    return this.navBarEl.nativeElement.offsetWidth;
-  }
-
-  // ~~~ panel ~~~
   private openPanel(panelId: string) {
     this.activePanelIds.push(panelId);
-    this.logger.debug(`openPanel(): opening #${panelId} panel`, 'NavbarComponent', {
-      panelId,
-      activePanelIds: this.activePanelIds,
-    });
   }
 
   private closePanel(panelId: string) {
     this.activePanelIds = this.activePanelIds.filter((id) => id !== panelId);
-    this.logger.debug(`closePanel(): closing #${panelId} panel`, 'NavbarComponent', {
-      panelId,
-      activePanelIds: this.activePanelIds,
-    });
   }
 
   private isPanelOpen(panelId: string) {
     return this.activePanelIds.indexOf(panelId) !== -1;
   }
 
-  // ~~~ helpers ~~~
-  private getLoggedVars() {
-    return {
-      navBarWidth: this.navBarWidth,
-      summedItemsWidth: this.summedItemsWidth,
-      vertical: this.vertical,
-    };
-  }
-
   private toggleDisplayAxis() {
     // ! cannot be run before ngAfterViewInit - the view must be initialised
-
-    // the container
-    const navBarWidth = this.navBarEl.nativeElement.offsetWidth;
-
-    if (this.summedItemsWidth >= navBarWidth) {
-      if (!this.vertical) {
-        this.vertical = true;
-        this.logger.debug(
-          'toggleDisplayAxis(): displaying navbars vertically',
-          'NavbarComponent',
-          this.getLoggedVars()
-        );
-      }
+    if (this._summedNavitemWidths >= this._navbarWidth) {
+      this.vertical = true;
     } else {
-      if (this.vertical) {
-        this.vertical = false;
-        this.logger.debug(
-          'toggleDisplayAxis(): displaying navbars horizontally',
-          'NavbarComponent',
-          this.getLoggedVars()
-        );
-      }
+      this.vertical = false;
     }
   }
 }

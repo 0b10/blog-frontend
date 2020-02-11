@@ -8,6 +8,7 @@ import { NavbarModule } from './ui/nav/navbar/navbar.module';
 import { AppRoutingModule } from './ui/router/app-routing.module';
 import { UiModule } from './ui/ui.module';
 import { LoggerModule } from './util/logger';
+import { ConsoleLoggerService } from './util/logger/console-logger.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,7 +22,7 @@ import { LoggerModule } from './util/logger';
     NgbModule,
     UiModule,
   ],
-  providers: [],
+  providers: [ConsoleLoggerService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

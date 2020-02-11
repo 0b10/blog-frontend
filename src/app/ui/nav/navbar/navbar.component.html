@@ -1,5 +1,9 @@
 <nav class="mb-5" aria-label="Primary" #primaryNavBar>
-  <ul class="{{ vertical ? '_extd-nav-v' : '_extd-nav-h' }}" #itemsContainer>
+  <ul
+    class="{{ vertical ? '_extd-nav-v' : '_extd-nav-h' }}"
+    (elementWidth)="onNavbarResize($event)"
+    #itemsContainer
+  >
     <ng-container *ngIf="vertical; else horizontal">
       <ngb-accordion #acc="ngbAccordion" [activeIds]="activePanelIds">
         <ngb-panel title="Simple" id="topLevel">
@@ -10,7 +14,9 @@
           </ng-template>
           <ng-template ngbPanelContent>
             <app-navitem
-              *ngFor="let nav of navs"
+              *ngFor="let nav of navsWithId"
+              (elementWidth)="onNavitemResize($event)"
+              [id]="nav.id"
               [uri]="nav.uri"
               [text]="nav.text"
               [vertical]="vertical"
@@ -21,7 +27,9 @@
     </ng-container>
     <ng-template #horizontal>
       <app-navitem
-        *ngFor="let nav of navs"
+        *ngFor="let nav of navsWithId"
+        (elementWidth)="onNavitemResize($event)"
+        [id]="nav.id"
         [uri]="nav.uri"
         [text]="nav.text"
         [vertical]="vertical"

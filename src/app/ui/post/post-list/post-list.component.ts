@@ -79,10 +79,11 @@ export class PostListComponent implements OnInit, OnDestroy {
    *  notified that there's an error for the last retrieval.
    */
   public get status(): TPostListStatus {
-    this.logger.debug(
-      `status: the backend status is: ${this.postListService.queryStatus}`,
-      'PostListComponent'
-    );
+    // FIXME: this is blowing up
+    // this.logger.debug(
+    //   `status: the backend status is: ${this.postListService.queryStatus}`,
+    //   'PostListComponent'
+    // );
     let status: TPostListStatus;
     switch (this.postListService.queryStatus) {
       case 'loading':
@@ -100,7 +101,8 @@ export class PostListComponent implements OnInit, OnDestroy {
           'PostListComponent'
         );
     }
-    this.logger.debug(`status: the component status is ${status!}`, 'PostListComponent');
+    // FIXME: blowing up
+    // this.logger.debug(`status: the component status is ${status!}`, 'PostListComponent');
     return status!;
   }
 
